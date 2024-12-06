@@ -1,5 +1,7 @@
 import P5 from "p5";
 
+const BOUNDS_BUFFER = 3;
+
 class Bounds {
     x: number
     y: number
@@ -12,10 +14,10 @@ class Bounds {
         this.height = height
     }
     inside(v: P5.Vector) {
-        return v.x > this.x
-            && v.x < this.x + this.width
-            && v.y > this.y
-            && v.y < this.y + this.height
+        return v.x >= this.x + BOUNDS_BUFFER
+            && v.x <= this.x + this.width - BOUNDS_BUFFER
+            && v.y >= this.y + BOUNDS_BUFFER
+            && v.y <= this.y + this.height - BOUNDS_BUFFER
     }
 }
 

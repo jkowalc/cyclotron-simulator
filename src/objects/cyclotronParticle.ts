@@ -1,7 +1,7 @@
 import P5 from "p5";
 import {Cyclotron} from "./cyclotron.ts";
 
-const PARTICLE_SIZE = 2
+const PARTICLE_SIZE = 5
 
 export class CyclotronParticle {
     _p5: P5
