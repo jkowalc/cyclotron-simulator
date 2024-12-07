@@ -8,13 +8,15 @@ export class CyclotronParticle {
     pos: P5.Vector
     velocity: P5.Vector
     cyclotron: Cyclotron
+    charge: number
     mass: number
-    constructor(p5: P5, start_pos: P5.Vector, start_velocity: P5.Vector, cyclotron: Cyclotron, mass: number) {
+    constructor(p5: P5, cyclotron: Cyclotron, start_pos: P5.Vector, start_velocity: P5.Vector, mass: number, charge: number) {
         this._p5 = p5;
         this.pos = start_pos
         this.velocity = start_velocity
         this.cyclotron = cyclotron
         this.mass = mass
+        this.charge = charge
     }
 
     draw(p5: P5) {

@@ -1,6 +1,7 @@
 import P5 from "p5";
 
 const BOUNDS_BUFFER = 3;
+const BOUNDS_PADDING = 20;
 
 class Bounds {
     x: number
@@ -25,29 +26,29 @@ export class Cyclotron {
     center: P5.Vector
     gap: number
     radius: number
-    magnetic_field_power: number
+    magnetic_field: number
     voltage: number
     bounds: Bounds
     _p5: P5
-    constructor(p5: P5, center: P5.Vector, gap: number, radius: number, magnetic_field_power: number, voltage: number, margin: number) {
+    constructor(p5: P5, center: P5.Vector, gap: number, radius: number, magnetic_field: number, voltage: number) {
         this._p5 = p5
         this.center = center
         this.gap = gap
         this.radius = radius
-        this.magnetic_field_power = magnetic_field_power
+        this.magnetic_field = magnetic_field
         this.voltage = voltage
         this.bounds = new Bounds(
-            center.x - radius - margin,
-            center.y - radius - margin - gap / 2,
-            2 * margin + 2 * radius,
-            2 * margin + 2 * radius + gap
+            center.x - radius - BOUNDS_PADDING,
+            center.y - radius - BOUNDS_PADDING - gap / 2,
+            2 * BOUNDS_PADDING + 2 * radius,
+            2 * BOUNDS_PADDING + 2 * radius + gap
         )
     }
     draw() {
         const p5 = this._p5;
         p5.push()
         p5.fill(255)
-        p5.stroke(255)
+        p5.noStroke()
         p5.rect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height)
         p5.pop()
         p5.arc(this.center.x,

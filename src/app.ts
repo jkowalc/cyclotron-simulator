@@ -13,8 +13,8 @@ const sketch = (p5: P5) => {
     p5.setup = ()=> {
         const canvas = p5.createCanvas(500, 500);
         canvas.parent("app");
-        cyclotron = new Cyclotron(p5, p5.createVector(250, 250), 10, 200, 10, 10, 20)
-        particle = new CyclotronParticle(p5, cyclotron.center, p5.createVector(0, 0), cyclotron, 10)
+        cyclotron = new Cyclotron(p5, p5.createVector(250, 250), 10, 200, 10, 10)
+        particle = new CyclotronParticle(p5, cyclotron, cyclotron.center, p5.createVector(0, 0), 10, 10)
     }
 
     // Draw function - runs every frame
