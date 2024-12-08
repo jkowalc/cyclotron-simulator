@@ -17,14 +17,15 @@ const sketch = (p5: P5) => {
         cyclotron = new Cyclotron(p5, 1.5, 15)
         cyclotron.voltage = 10
         cyclotron.magnetic_field = 200
-        particle = new CyclotronParticle(p5, cyclotron, p5.createVector(0, 0), p5.createVector(0, 0))
+        particle = new CyclotronParticle(p5, cyclotron, new P5.Vector(0, 0), new P5.Vector(0, 0))
         particle.mass = 1.67e-27
         particle.charge = 1.6e-19
     }
 
     // Draw function - runs every frame
     p5.draw = () => {
-        const cyclotronCenter = p5.createVector(500, 500)
+        p5.background(255)
+        const cyclotronCenter = new P5.Vector(500, 500)
         const pictureScale = 25
         p5.push()
         p5.translate(cyclotronCenter)
@@ -35,15 +36,10 @@ const sketch = (p5: P5) => {
         particle.draw(p5)
         p5.pop()
         // Temporary position, velocity and acceleration print for debug
-        p5.push()
-        p5.noStroke()
-        p5.rect(1000, 100, 1000, 200)
-        p5.pop()
         p5.textSize(20)
         p5.text("Position: " + vectorToString(particle.pos), 1000, 150)
         p5.text("Velocity: " + vectorToString(particle.velocity), 1000, 200)
         p5.text("Acceleration: " + vectorToString(particle.getAcceleration()), 1000, 250)
-        // Temporary debug end
     }
 
 }

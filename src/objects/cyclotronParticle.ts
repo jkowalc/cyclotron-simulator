@@ -51,10 +51,10 @@ export class CyclotronParticle {
 
     update() {
         const p5 = this._p5;
-        let acceleration = p5.createVector()
+        let acceleration = new P5.Vector()
         const dt = 5e-13
         if(this.isInElectricField()) {
-            const electricPart = p5.createVector(0, dt * this.cyclotron.voltage * this.charge / this.mass / this.cyclotron.gap)
+            const electricPart = new P5.Vector(0, dt * this.cyclotron.voltage * this.charge / this.mass / this.cyclotron.gap)
             acceleration.add(electricPart)
         }
         if(this.isInMagneticField()) {
@@ -84,9 +84,8 @@ export class CyclotronParticle {
      * Calculates whether the particle is in range of the cyclotron's magnetic field.
      */
     isInMagneticField(): boolean {
-        const p5 = this._p5;
-        return this.pos.dist(p5.createVector(0, -this.cyclotron.gap / 2)) < this.cyclotron.radius ||
-        this.pos.dist(p5.createVector(0, this.cyclotron.gap / 2)) < this.cyclotron.radius ||
+        return this.pos.dist(new P5.Vector(0, -this.cyclotron.gap / 2)) < this.cyclotron.radius ||
+        this.pos.dist(new P5.Vector(0, this.cyclotron.gap / 2)) < this.cyclotron.radius ||
         this.isInElectricField()
     }
 }
