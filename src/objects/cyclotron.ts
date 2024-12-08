@@ -23,23 +23,48 @@ class Bounds {
 }
 
 export class Cyclotron {
-    center: P5.Vector
+    /**
+     * Gap [m]
+     *
+     * Gap between cyclotron's elements.
+     */
     gap: number
+    /**
+     * Radius [m]
+     *
+     * Radius of each of cyclotron's elements.
+     */
     radius: number
+    /**
+     * Magnetic field [T]
+     *
+     * The magnetic field vector is a vector of length {magnetic_field},
+     * going away from observer if the number is positive and towards the observer if negative.
+     */
     magnetic_field: number
+    /**
+     * Voltage [V]
+     *
+     * The voltage applied to cyclotron's elements at any given time.
+     */
     voltage: number
+    /**
+     * Cyclotron's simulation bounds.
+     *
+     * Declares how big of a region must be cleared to reset the picture
+     * and where objects must disappear if they get too far away.
+     */
     bounds: Bounds
     _p5: P5
-    constructor(p5: P5, center: P5.Vector, gap: number, radius: number, magnetic_field: number, voltage: number) {
+    constructor(p5: P5, gap: number, radius: number) {
         this._p5 = p5
-        this.center = center
         this.gap = gap
         this.radius = radius
-        this.magnetic_field = magnetic_field
-        this.voltage = voltage
+        this.magnetic_field = 0
+        this.voltage = 0
         this.bounds = new Bounds(
-            center.x - radius - BOUNDS_PADDING,
-            center.y - radius - BOUNDS_PADDING - gap / 2,
+            - radius - BOUNDS_PADDING,
+            - radius - BOUNDS_PADDING - gap / 2,
             2 * BOUNDS_PADDING + 2 * radius,
             2 * BOUNDS_PADDING + 2 * radius + gap
         )
@@ -51,14 +76,14 @@ export class Cyclotron {
         p5.noStroke()
         p5.rect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height)
         p5.pop()
-        p5.arc(this.center.x,
-            this.center.y - this.gap / 2,
+        p5.arc(0,
+            - this.gap / 2,
             this.radius * 2,
             this.radius * 2,
             p5.PI, p5.TWO_PI,
             p5.CHORD)
-        p5.arc(this.center.x,
-            this.center.y + this.gap / 2,
+        p5.arc(0,
+            this.gap / 2,
             this.radius * 2,
             this.radius * 2,
             0, p5.PI,
