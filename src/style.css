@@ -1,1 +1,15 @@
 body {}
+
+.input {
+    padding: 5px;
+    font-size: 16px;
+    height: 30px;
+    width: 200px;
+    border: 1px solid #000;
+    box-sizing: border-box;
+}
+
+.text {
+    padding: 5px;
+    font-size: 20px;
+}
