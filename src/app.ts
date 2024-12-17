@@ -63,7 +63,7 @@ const sketch = (p5: P5) => {
         const magneticValue = parseFloat(magneticInput.value() as string)
 
         if (!isNaN(voltageValue)) {
-            cyclotron.voltage = voltageValue
+            cyclotron.basicVoltage = voltageValue
         }
 
         if (!isNaN(magneticValue)) {
@@ -80,6 +80,7 @@ const sketch = (p5: P5) => {
         p5.translate(cyclotronCenter)
         p5.scale(pictureScale)
         p5.strokeWeight(0.05)
+        cyclotron.update(particle)
         cyclotron.draw()
         particle.update()
         particle.draw(p5)

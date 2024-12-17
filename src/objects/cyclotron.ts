@@ -1,4 +1,5 @@
 import P5 from "p5";
+import {CyclotronParticle} from "./cyclotronParticle.ts";
 
 const BOUNDS_BUFFER = 3;
 const BOUNDS_PADDING = 20;
@@ -49,25 +50,55 @@ export class Cyclotron {
      */
     voltage: number
     /**
+     * Basic voltage [V]
+     *
+     * Basic voltage of the cyclotron that is multiplied by sign
+     */
+    basicVoltage: number
+    voltageSign: boolean
+    /**
      * Cyclotron's simulation bounds.
      *
      * Declares how big of a region must be cleared to reset the picture
      * and where objects must disappear if they get too far away.
      */
     bounds: Bounds
+    /**
+     * Time ratio [1]
+     *
+     * Animation time to real time ratio
+     * Dictates how fast the animation is
+     */
+    time_ratio: number
     _p5: P5
+    _frames: number
     constructor(p5: P5, gap: number, radius: number) {
         this._p5 = p5
         this.gap = gap
         this.radius = radius
         this.magnetic_field = 0
         this.voltage = 0
+        this.basicVoltage = 0
+        this.voltageSign = true
         this.bounds = new Bounds(
             - radius - BOUNDS_PADDING,
             - radius - BOUNDS_PADDING - gap / 2,
             2 * BOUNDS_PADDING + 2 * radius,
             2 * BOUNDS_PADDING + 2 * radius + gap
         )
+        this.time_ratio = 1e-10
+        this._frames = 0
+    }
+    update(p: CyclotronParticle) {
+        const p5 = this._p5;
+        this._frames += 1
+        const frequency = (p.charge * this.magnetic_field) / (p5.TWO_PI * p.mass)
+        const period = 1 / frequency;
+        const period_frames = Math.floor(period * p5.frameRate() / this.time_ratio);
+        if(this._frames % period_frames == 0) {
+            this.voltageSign = !this.voltageSign
+            this.voltage = this.voltageSign ? this.basicVoltage : -this.basicVoltage;
+        }
     }
     draw() {
         const p5 = this._p5;
