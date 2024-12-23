@@ -55,6 +55,7 @@ const sketch = (p5: P5) => {
         particle = new CyclotronParticle(p5, cyclotron, new P5.Vector(0, 0), new P5.Vector(0, 0))
         particle.mass = 1.67e-27
         particle.charge = 1.6e-19
+        p5.frameRate(60)
     }
 
     // Draw function - runs every frame

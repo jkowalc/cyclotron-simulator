@@ -72,7 +72,7 @@ export class Cyclotron {
      */
     time_ratio: number
     _p5: P5
-    _frames: number
+    framerate: number
     constructor(p5: P5, gap: number, radius: number) {
         this._p5 = p5
         this.gap = gap
@@ -88,15 +88,14 @@ export class Cyclotron {
             2 * BOUNDS_PADDING + 2 * radius + gap
         )
         this.time_ratio = 1e-10
-        this._frames = 0
+        this.framerate = 60
     }
     update(p: CyclotronParticle) {
         const p5 = this._p5;
-        this._frames += 1
-        const frequency = (p.charge * this.magnetic_field) / (p5.TWO_PI * p.mass)
+        const frequency = 2 * (p.charge * this.magnetic_field) / (p5.TWO_PI * p.mass)
         const period = 1 / frequency;
-        const period_frames = Math.floor(period * p5.frameRate() / this.time_ratio);
-        if(this._frames % period_frames == 0) {
+        const period_frames = Math.floor(period * this.framerate / this.time_ratio);
+        if(p5.frameCount % period_frames == period_frames / 2) {
             this.voltageSign = !this.voltageSign
             this.voltage = this.voltageSign ? this.basicVoltage : -this.basicVoltage;
         }
