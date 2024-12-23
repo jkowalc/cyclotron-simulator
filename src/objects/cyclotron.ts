@@ -1,5 +1,6 @@
 import P5 from "p5";
 import {CyclotronParticle} from "./cyclotronParticle.ts";
+import {drawArrow} from "../arrow.ts";
 
 const BOUNDS_BUFFER = 3;
 const BOUNDS_PADDING = 20;
@@ -119,5 +120,16 @@ export class Cyclotron {
             this.radius * 2,
             0, p5.PI,
             p5.CHORD)
+        const arrowVector = new P5.Vector(0, this.voltageSign ? this.gap : -this.gap)
+        const arrowStartY = this.voltageSign ? -this.gap / 2 : this.gap / 2;
+        p5.push()
+        p5.stroke(255, 0, 0)
+        p5.fill(255, 0, 0)
+        drawArrow(p5, new P5.Vector(-this.radius * 2 / 3, arrowStartY), arrowVector)
+        drawArrow(p5, new P5.Vector(-this.radius / 3, arrowStartY), arrowVector)
+        drawArrow(p5, new P5.Vector(0, arrowStartY), arrowVector)
+        drawArrow(p5, new P5.Vector(this.radius / 3, arrowStartY), arrowVector)
+        drawArrow(p5, new P5.Vector(this.radius * 2 / 3, arrowStartY), arrowVector)
+        p5.pop()
     }
 }
