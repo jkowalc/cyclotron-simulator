@@ -12,4 +12,17 @@ body {}
 .text {
     padding: 5px;
     font-size: 20px;
+    font-family: sans-serif;
+    font-weight: normal;
+}
+
+.button {
+    padding: 5px;
+    font-size: 16px;
+    height: 30px;
+    width: 100px;
+}
+
+.slider {
+    width: 200px;
 }

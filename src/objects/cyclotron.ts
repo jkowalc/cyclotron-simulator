@@ -90,12 +90,12 @@ export class Cyclotron {
         this.time_ratio = 1e-10
         this.framerate = 60
     }
-    update(p: CyclotronParticle) {
+    update(p: CyclotronParticle, speedMultiplier: number) {
         const p5 = this._p5;
         const frequency = 2 * (p.charge * this.magnetic_field) / (p5.TWO_PI * p.mass)
         const period = 1 / frequency;
-        const period_frames = Math.floor(period * this.framerate / this.time_ratio);
-        if(p5.frameCount % period_frames == period_frames / 2) {
+        const period_frames = Math.floor(period * this.framerate / (this.time_ratio * speedMultiplier));
+        if(p5.frameCount % period_frames == Math.floor(period_frames / 2)) {
             this.voltageSign = !this.voltageSign
             this.voltage = this.voltageSign ? this.basicVoltage : -this.basicVoltage;
         }

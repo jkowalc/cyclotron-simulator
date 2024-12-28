@@ -2,7 +2,6 @@ import './style.css'
 import P5 from "p5";
 import {Cyclotron} from "./objects/cyclotron.ts";
 import {CyclotronParticle} from "./objects/cyclotronParticle.ts";
-import {vectorToString} from "./utils.ts";
 
 interface Particle {
     mass: number;
@@ -25,29 +24,48 @@ const sketch = (p5: P5) => {
     let voltageInput: P5.Element
     let magneticInput: P5.Element
 
+    let animationStartStop: P5.Element
+    let animationReset: P5.Element
+    let animationSpeed: P5.Element
+    let animationRunning: boolean
+
     // Setup function - runs once
     p5.setup = ()=> {
-        const canvas = p5.createCanvas(2000, 2000);
+        const canvas = p5.createCanvas(1920, 1080);
         canvas.parent("app");
-        
+
+        // Parameter inputs        
         particleSelect = p5.createSelect()
-        particleSelect.position(1300, 300)
+        particleSelect.position(1200, 200)
         particleSelect.class('input')
         particleSelect.option('Proton')
         particleSelect.option('Deuteron')
         particleSelect.option('Alpha particle')
         particleSelect.option('Electron')
-
         voltageInput = p5.createInput('10')
-        voltageInput.position(1300, 350)
+        voltageInput.position(1200, 250)
         voltageInput.class('input')
         magneticInput = p5.createInput('200')
-        magneticInput.position(1300, 400)
+        magneticInput.position(1200, 300)
         magneticInput.class('input')
+        p5.createElement('label', 'Particle: ').position(1000, 200).class('text')
+        p5.createElement('label', 'Voltage [V]: ').position(1000, 250).class('text')
+        p5.createElement('label', 'Magnetic field [T]: ').position(1000, 300).class('text')
+        p5.createElement('label', 'Animation speed: ').position(1000, 350).class('text')
 
-        p5.createElement('label', 'Particle: ').position(1100, 300).class('text')
-        p5.createElement('label', 'Voltage [V]: ').position(1100, 350).class('text')
-        p5.createElement('label', 'Magnetic field [T]: ').position(1100, 400).class('text')
+        // Animation control
+        animationSpeed = p5.createSlider(-5, 5, 0)
+        animationSpeed.position(1200, 360)
+        animationSpeed.class('slider')
+        animationStartStop = p5.createButton('Start/Stop')
+        animationStartStop.position(1050, 400)
+        animationStartStop.class('button')
+        animationStartStop.mouseClicked(startStopAnimation)
+        animationReset = p5.createButton('Reset')
+        animationReset.position(1200, 400)
+        animationReset.class('button')
+        animationReset.mouseClicked(resetAnimation)
+        animationRunning = false
 
         cyclotron = new Cyclotron(p5, 1.5, 15)
         cyclotron.voltage = 10
@@ -81,18 +99,41 @@ const sketch = (p5: P5) => {
         p5.translate(cyclotronCenter)
         p5.scale(pictureScale)
         p5.strokeWeight(0.05)
-        cyclotron.update(particle)
+        if (animationRunning) {
+            const speedMultiplier = Math.pow(2, animationSpeed.value() as number)
+            cyclotron.update(particle, speedMultiplier)
+            particle.update(speedMultiplier)
+        }
         cyclotron.draw()
-        particle.update()
         particle.draw(p5)
         p5.pop()
-        // Temporary position, velocity and acceleration print for debug
+
+        // Particle info
+        const velocityValue = particle.velocity.mag()
+        const kineticEnergy = particle.mass * velocityValue ** 2 / 2
         p5.textSize(20)
-        p5.text("Position: " + vectorToString(particle.pos), 1000, 150)
-        p5.text("Velocity: " + vectorToString(particle.velocity), 1000, 200)
-        p5.text("Acceleration: " + vectorToString(particle.getAcceleration()), 1000, 250)
+        p5.textFont('sans-serif')
+        p5.text("Mass: " + particle.mass + " kg", 1000, 550)
+        p5.text("Charge: " + particle.charge + " C", 1000, 600)
+        p5.text("Velocity: " + velocityValue + " m/s", 1000, 650)
+        p5.text("Acceleration: " + particle.getAcceleration().mag() + " m/s^2", 1000, 700)
+        p5.text("Kinetic energy: " + kineticEnergy + " J", 1000, 750)
     }
 
+    function startStopAnimation() {
+        animationRunning = !animationRunning
+    }
+
+    function resetAnimation() {
+        particle = new CyclotronParticle(p5, cyclotron, new P5.Vector(0, 0), new P5.Vector(0, 0))
+        particle.mass = particleData[particleSelect.value()].mass
+        particle.charge = particleData[particleSelect.value()].charge
+        particleSelect.value('Proton')
+        voltageInput.value(10)
+        magneticInput.value(200)
+        animationSpeed.value(0)
+        animationRunning = false
+    }
 }
 
 new P5(sketch);

@@ -49,10 +49,10 @@ export class CyclotronParticle {
         p5.pop()
     }
 
-    update() {
+    update(speedMultiplier: number) {
         const p5 = this._p5;
         let acceleration = new P5.Vector()
-        const dt = this.cyclotron.time_ratio * (1 / p5.frameRate())
+        const dt = this.cyclotron.time_ratio * (1 / p5.frameRate()) * speedMultiplier
         if(this.isInElectricField()) {
             const electricPart = new P5.Vector(0, dt * this.cyclotron.voltage * this.charge / this.mass / this.cyclotron.gap)
             acceleration.add(electricPart)
