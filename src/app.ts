@@ -3,9 +3,9 @@ import P5 from "p5";
 import {Cyclotron} from "./objects/cyclotron.ts";
 import {CyclotronParticle} from "./objects/cyclotronParticle.ts";
 
-interface Particle {
-    mass: number;
-    charge: number;
+type Particle = {
+    mass: number,
+    charge: number
 }
 
 const particleData: { [id: string]: Particle } = {
@@ -126,12 +126,6 @@ const sketch = (p5: P5) => {
 
     function resetAnimation() {
         particle = new CyclotronParticle(p5, cyclotron, new P5.Vector(0, 0), new P5.Vector(0, 0))
-        particle.mass = particleData[particleSelect.value()].mass
-        particle.charge = particleData[particleSelect.value()].charge
-        particleSelect.value('Proton')
-        voltageInput.value(10)
-        magneticInput.value(200)
-        animationSpeed.value(0)
         animationRunning = false
     }
 }
