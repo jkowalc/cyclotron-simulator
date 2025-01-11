@@ -110,16 +110,18 @@ const sketch = (p5: P5) => {
 
         // Particle info
         const velocityValue = particle.velocity.mag()
-        const kineticEnergy = particle.mass * velocityValue ** 2 / 2
+        const kineticEnergy = 6.24151e12 * particle.mass * Math.pow(velocityValue, 2) / 2
+        p5.rect(950, 500, 700, 350, 20);
         p5.textSize(20)
         p5.textFont('sans-serif')
         p5.text("Mass: " + particle.mass + " kg", 1000, 550)
         p5.text("Charge: " + particle.charge + " C", 1000, 600)
         p5.text("Velocity: " + velocityValue + " m/s", 1000, 650)
         p5.text("Acceleration: " + particle.getAcceleration().mag() + " m/s^2", 1000, 700)
-        p5.text("Kinetic energy: " + kineticEnergy + " J", 1000, 750)
-        const maxEnergy = (Math.pow(particle.charge * cyclotron.magnetic_field * cyclotron.radius, 2) / (2 * particle.mass))
-        p5.text("Theoretical kinetic energy on exit: " + maxEnergy, 1000, 800)
+        p5.text("Kinetic energy: " + kineticEnergy + " MeV", 1000, 750)
+        const maxEnergy = 6.24151e12 * (Math.pow(particle.charge * cyclotron.magnetic_field * cyclotron.radius, 2) / (2 * particle.mass))
+        p5.text("Theoretical kinetic energy on exit: " + maxEnergy + " MeV", 1000, 800)
+        p5.rect(950, 150, 700, 300, 20);
     }
 
     function startStopAnimation() {
