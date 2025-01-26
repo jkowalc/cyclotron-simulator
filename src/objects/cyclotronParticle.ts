@@ -20,7 +20,6 @@ export class CyclotronParticle {
      * Mass [kg]
      */
     mass: number
-    _acceleration: P5.Vector
     constructor(p5: P5, cyclotron: Cyclotron, start_pos: P5.Vector, start_velocity: P5.Vector) {
         this._p5 = p5;
         this.pos = start_pos
@@ -28,7 +27,6 @@ export class CyclotronParticle {
         this.cyclotron = cyclotron
         this.mass = 0
         this.charge = 0
-        this._acceleration = new P5.Vector(0, 0)
     }
 
     draw(p5: P5) {
@@ -51,25 +49,20 @@ export class CyclotronParticle {
 
     update(speedMultiplier: number) {
         const p5 = this._p5;
-        let acceleration = new P5.Vector()
         const dt = this.cyclotron.time_ratio * (1 / p5.frameRate()) * speedMultiplier
-        if(this.isInElectricField()) {
-            const electricPart = new P5.Vector(0, dt * this.cyclotron.voltage * this.charge / this.mass / this.cyclotron.gap)
-            acceleration.add(electricPart)
-        }
+        const originalVelocityMag = this.velocity.mag()
         if(this.isInMagneticField()) {
             const magneticPart = this.velocity.copy().rotate(p5.HALF_PI).mult(dt * this.charge * this.cyclotron.magnetic_field / this.mass)
-            acceleration.add(magneticPart)
+            // Applying magnetic force shouldn't change the magnitude of the velocity vector
+            // (but it sometimes changes because of inaccurate computations)
+            this.velocity.add(magneticPart).normalize().mult(originalVelocityMag)
         }
-        this.velocity.add(acceleration)
-        this.pos.add(this.velocity)
-        this._acceleration = acceleration
+        if(this.isInElectricField()) {
+            const electricPart = new P5.Vector(0, dt * this.cyclotron.voltage * this.charge / this.mass / this.cyclotron.gap)
+            this.velocity.add(electricPart)
+        }
+        this.pos.add(this.velocity.copy().mult(dt))
     }
-
-    getAcceleration() {
-        return this._acceleration;
-    }
-
     /**
      * Calculates whether the particle is in range of the cyclotron's electric field.
      */

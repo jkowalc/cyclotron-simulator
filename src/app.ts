@@ -42,10 +42,10 @@ const sketch = (p5: P5) => {
         particleSelect.option('Deuteron')
         particleSelect.option('Alpha particle')
         particleSelect.option('Electron')
-        voltageInput = p5.createInput('10')
+        voltageInput = p5.createInput('5000000000000')
         voltageInput.position(1200, 250)
         voltageInput.class('input')
-        magneticInput = p5.createInput('200')
+        magneticInput = p5.createInput('70')
         magneticInput.position(1200, 300)
         magneticInput.class('input')
         p5.createElement('label', 'Particle: ').position(1000, 200).class('text')
@@ -68,11 +68,7 @@ const sketch = (p5: P5) => {
         animationRunning = false
 
         cyclotron = new Cyclotron(p5, 1.5, 15)
-        cyclotron.voltage = 10
-        cyclotron.magnetic_field = 200
         particle = new CyclotronParticle(p5, cyclotron, new P5.Vector(0, 0), new P5.Vector(0, 0))
-        particle.mass = 1.67e-27
-        particle.charge = 1.6e-19
         p5.frameRate(60)
     }
 
@@ -114,10 +110,10 @@ const sketch = (p5: P5) => {
         p5.rect(950, 500, 700, 350, 20);
         p5.textSize(20)
         p5.textFont('sans-serif')
-        p5.text("Mass: " + particle.mass + " kg", 1000, 550)
-        p5.text("Charge: " + particle.charge + " C", 1000, 600)
-        p5.text("Velocity: " + velocityValue + " m/s", 1000, 650)
-        p5.text("Acceleration: " + particle.getAcceleration().mag() + " m/s^2", 1000, 700)
+        p5.text("Cyclotron radius: " + cyclotron.radius + " m", 1000, 550)
+        p5.text("Mass: " + particle.mass + " kg", 1000, 600)
+        p5.text("Charge: " + particle.charge + " C", 1000, 650)
+        p5.text("Velocity: " + velocityValue + " m/s", 1000, 700)
         p5.text("Kinetic energy: " + kineticEnergy + " MeV", 1000, 750)
         const maxEnergy = 6.24151e12 * (Math.pow(particle.charge * cyclotron.magnetic_field * cyclotron.radius, 2) / (2 * particle.mass))
         p5.text("Theoretical kinetic energy on exit: " + maxEnergy + " MeV", 1000, 800)
